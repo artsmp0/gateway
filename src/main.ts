@@ -30,5 +30,12 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter(), new HttpExceptionFilter());
 
   await app.listen(3000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 bootstrap();
+
+declare const module: any;
