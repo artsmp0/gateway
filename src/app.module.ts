@@ -5,6 +5,8 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { getConfig } from './utils';
 import { CacheModule } from '@nestjs/cache-manager';
+import { redisStore } from 'cache-manager-redis-store';
+import { RedisClientOptions } from 'redis';
 
 @Module({
   /** imports 对应的 module 之后，就可以使用这个 module exports 出来的内容 */
@@ -19,8 +21,13 @@ import { CacheModule } from '@nestjs/cache-manager';
       isGlobal: true,
       load: [getConfig],
     }),
-    CacheModule.register({
+    CacheModule.register<RedisClientOptions>({
       isGlobal: true,
+      store: redisStore,
+      host: getConfig('REDIS_CONFIG').host,
+      port: getConfig('REDIS_CONFIG').port,
+      auth: getConfig('REDIS_CONFIG').auth,
+      db: getConfig('REDIS_CONFIG').db,
     }),
     UserModule,
   ],

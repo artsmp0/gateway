@@ -19,18 +19,22 @@ export class FeishuService {
 
   async getAppToken() {
     let appToken: string;
-    appToken = await this.cacheManager.get(this.APP_TOKEN_CACHE_KEY);
-    if (!appToken) {
-      const res = await getAppToken();
-      if (res.code !== 0) {
-        throw new BusinessException('飞书调用异常！');
+    try {
+      appToken = await this.cacheManager.get(this.APP_TOKEN_CACHE_KEY);
+      if (!appToken) {
+        const res = await getAppToken();
+        if (res.code !== 0) {
+          throw new BusinessException('飞书调用异常！');
+        }
+        appToken = res.app_access_token;
+        this.cacheManager.set(
+          this.APP_TOKEN_CACHE_KEY,
+          appToken,
+          res.expire - 60,
+        );
       }
-      appToken = res.app_access_token;
-      this.cacheManager.set(
-        this.APP_TOKEN_CACHE_KEY,
-        appToken,
-        res.expire - 60,
-      );
+    } catch (error) {
+      console.log('error: ', error);
     }
     return appToken;
   }

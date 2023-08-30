@@ -26,7 +26,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
     // defaultVersion: '1',
-    defaultVersion: [VERSION_NEUTRAL, '1', '2'],
+    // defaultVersion: [VERSION_NEUTRAL, '1', '2'],
   });
 
   app.useGlobalInterceptors(new TransformInterceptor());

@@ -17,5 +17,6 @@ export const getAppToken = async () => {
       app_secret: APP_SECRET,
     },
   });
+  console.log('data: ', data);
   return data as GetAppTokenRes;
 };
